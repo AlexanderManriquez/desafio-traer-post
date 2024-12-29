@@ -1,16 +1,13 @@
 async function getPosts() {
     try {
         const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-        
         if (!response.ok) {
             throw new Error('Error en la solicitud a la API');
         }
         
-        // Convertir la respuesta a formato JSON
         const posts = await response.json();
-
-        // Llamamos a la función para mostrar los resultados
-        showPosts(posts);
+        showFirst20Posts(posts);
+        await receiveInfo();
 
     } catch (error) {
         console.error('Ocurrió un error:', error);
@@ -18,12 +15,12 @@ async function getPosts() {
     }
 }
 
-function showPosts(posts) {
+function showFirst20Posts(posts) {
     const postContainer = document.getElementById('post-data');
     
     const postsHTML = `
         <ul>
-            ${posts.map(post => `
+            ${posts.slice(0, 20).map(post => `
                 <li>
                     <strong>${post.title}</strong>
                     <p>${post.body}</p>
@@ -35,6 +32,15 @@ function showPosts(posts) {
     postContainer.innerHTML = postsHTML;
 }
 
+function sendInfo() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve('Información Enviada');
+        }, 3000);
+    });
+}
 
-
-
+async function receiveInfo() {
+    const message = await sendInfo();
+    alert(message);
+}
